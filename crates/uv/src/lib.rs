@@ -22,6 +22,7 @@ use tracing::{debug, instrument};
 
 use uv_cache::{Cache, Refresh};
 use uv_cache_info::Timestamp;
+use uv_cli::InstallFormat;
 #[cfg(feature = "self-update")]
 use uv_cli::SelfUpdateArgs;
 use uv_cli::{
@@ -713,6 +714,8 @@ async fn run(mut cli: Cli) -> Result<ExitStatus> {
                     .combine(Refresh::from(args.settings.upgrade.clone())),
             );
 
+            let format = InstallFormat::Text;
+
             commands::pip_install(
                 &requirements,
                 &constraints,
@@ -759,6 +762,7 @@ async fn run(mut cli: Cli) -> Result<ExitStatus> {
                 args.dry_run,
                 printer,
                 globals.preview,
+                &format,
             )
             .await
         }

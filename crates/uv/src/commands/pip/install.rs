@@ -9,6 +9,7 @@ use owo_colors::OwoColorize;
 use tracing::{Level, debug, enabled};
 
 use uv_cache::Cache;
+use uv_cli::InstallFormat;
 use uv_client::{BaseClientBuilder, FlatIndexClient, RegistryClientBuilder};
 use uv_configuration::{
     BuildOptions, Concurrency, ConfigSettings, Constraints, DryRun, ExtrasSpecification,
@@ -96,6 +97,7 @@ pub(crate) async fn pip_install(
     dry_run: DryRun,
     printer: Printer,
     preview: PreviewMode,
+    format: &InstallFormat,
 ) -> anyhow::Result<ExitStatus> {
     let start = std::time::Instant::now();
 
@@ -284,6 +286,15 @@ pub(crate) async fn pip_install(
             SatisfiesResult::Unsatisfied(requirement) => {
                 debug!("At least one requirement is not satisfied: {requirement}");
             }
+        }
+    }
+
+    match format {
+        InstallFormat::Text => {
+            writeln!(printer.stdout(), "Output format text")?;
+        }
+        InstallFormat::Json => {
+            writeln!(printer.stdout(), "Ouptut format JSON")?;
         }
     }
 

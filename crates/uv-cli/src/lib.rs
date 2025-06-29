@@ -58,6 +58,15 @@ pub enum ListFormat {
     Json,
 }
 
+#[derive(Debug, Default, Clone, clap::ValueEnum)]
+pub enum InstallFormat {
+    /// Plain text (for humans).
+    #[default]
+    Text,
+    /// JSON (for computers).
+    Json,
+}
+
 fn extra_name_with_clap_error(arg: &str) -> Result<ExtraName> {
     ExtraName::from_str(arg).map_err(|_err| {
         anyhow!(
